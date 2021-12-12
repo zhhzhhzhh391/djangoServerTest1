@@ -1,0 +1,48 @@
+{
+  "uid" : "b1a8273437954620fa374b796ffaacdd",
+  "name" : "behaviors",
+  "children" : [ {
+    "name" : "test_01",
+    "uid" : "80b55dcdb7bc2bda",
+    "parentUid" : "b1a8273437954620fa374b796ffaacdd",
+    "status" : "passed",
+    "time" : {
+      "start" : 1627207976184,
+      "stop" : 1627207976185,
+      "duration" : 1
+    },
+    "flaky" : false,
+    "newFailed" : false,
+    "parameters" : [ ]
+  }, {
+    "name" : "获取所有版本数据",
+    "children" : [ {
+      "name" : "test_",
+      "uid" : "3054bef4251530e0",
+      "parentUid" : "9d8a549092c0c5480a270dc0d8473576",
+      "status" : "passed",
+      "time" : {
+        "start" : 1627571032043,
+        "stop" : 1627571032069,
+        "duration" : 26
+      },
+      "flaky" : false,
+      "newFailed" : false,
+      "parameters" : [ ]
+    }, {
+      "name" : "test_getAllEditionData",
+      "uid" : "c15a45cf4878e392",
+      "parentUid" : "9d8a549092c0c5480a270dc0d8473576",
+      "status" : "passed",
+      "time" : {
+        "start" : 1627571516979,
+        "stop" : 1627571517009,
+        "duration" : 30
+      },
+      "flaky" : false,
+      "newFailed" : false,
+      "parameters" : [ ]
+    } ],
+    "uid" : "9d8a549092c0c5480a270dc0d8473576"
+  } ]
+}

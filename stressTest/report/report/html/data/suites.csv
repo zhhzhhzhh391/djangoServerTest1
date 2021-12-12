@@ -1,0 +1,4 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu Jul 29 23:11:56 CST 2021","Thu Jul 29 23:11:57 CST 2021","30","","taskOne","TestEditionControlSystem","","","test_getAllEditionData",""
+"passed","Thu Jul 29 23:03:52 CST 2021","Thu Jul 29 23:03:52 CST 2021","26","","taskOne","TestEditionControlSystem","","","test_",""
+"passed","Sun Jul 25 18:12:56 CST 2021","Sun Jul 25 18:12:56 CST 2021","1","","taskOne","Test_python","","","test_01","我是 test_01 用例描述"

@@ -1,0 +1,15 @@
+{
+  "total" : 2,
+  "items" : [ {
+    "uid" : "9d8a549092c0c5480a270dc0d8473576",
+    "name" : "获取所有版本数据",
+    "statistic" : {
+      "failed" : 0,
+      "broken" : 0,
+      "skipped" : 0,
+      "passed" : 2,
+      "unknown" : 0,
+      "total" : 2
+    }
+  } ]
+}
