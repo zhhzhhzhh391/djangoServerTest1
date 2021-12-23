@@ -31,3 +31,4 @@ class classInfoViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
+

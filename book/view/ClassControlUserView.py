@@ -26,6 +26,7 @@ class ClassControlUserViewSet(ModelViewSet):
         登录接口、获取登录用户信息
         :return:
         """
+        print(request.data)
         username = request.data.get('username',None)
         password = request.data.get('password',None)
         if username and password is None:
@@ -46,16 +47,10 @@ class ClassControlUserViewSet(ModelViewSet):
             }
             UserToken.objects.update_or_create(user=user, defaults=defaults)
              #当对查询返回的QuerySet类型data进行反序列化的时候，如果传入的是多条数据，我们需要指定many=True
-            ser = self.serializer_class(user_obj,many=True)
-            return JsonResponse(data=ser.data,
-                                code=userCode.USER_LOGIN_SUCCESS,
-                                msg=userMsg.USER_LOGIN_SUCCESS,
-                                status=status.HTTP_200_OK)
+            ser = self.serializer_class(user,many=False)
+            return Response(data=ser.data,status=status.HTTP_200_OK)
         else:
-            return JsonResponse(code=userCode.USER_LOGIN_FAILED,
-                                msg=userMsg.USER_LOGIN_FAILED,
-                                data='',
-                                status=status.HTTP_200_OK)
+            return Response(data=None,status=status.HTTP_200_OK)
 
 class TokenAuthtication(BaseAuthentication):
     def authenticate(self, request):
