@@ -20,28 +20,35 @@ class ChatConsumer(WebsocketConsumer):
         raise StopConsumer
 
     def websocket_receive(self, text_data=None, bytes_data=None):
-        print(text_data)
         #万一转的是json进行处理
         if type(text_data) == dict:
             text_data = json.dumps(text_data['text'])
-        print(text_data)
-        text_data_json = json.loads(json.loads(text_data))
-        message = chat_code_to_msg(text_data_json['code'],text_data_json['msg'])
-
-        self.send(text_data=json.dumps({
-            'message':message
-        }))
-
+            text_data_json = json.loads(json.loads(text_data))
+            code = text_data_json['code']
+            if code == 200:
+                userId = text_data_json['id']
+                username = text_data_json['username']
+                print(username)
+                token = UserToken.objects.filter(user_id=userId);
+                msg = chat_code_to_msg(username,userId)
+                self.send(text_data=json.dumps({
+                    'code':200,
+                    'msg':msg,
+                }))
+            else:
+                self.send(text_data=json.dumps({
+                'code':400,
+                'msg':'erro',
+            }))
 
 #业务逻辑
-def chat_code_to_msg(code,msg):
-    global userList
-
-    if code == 100:
-        pass
-
-    res ={
-        'code':100,
-        'userList':msg
+def chat_code_to_msg(username,userId):
+    user_item = {
+        'id':userId,
+        'username':username,
     }
-    return res
+
+    if user_item not in userList:
+        userList.append(user_item)
+
+    return userList

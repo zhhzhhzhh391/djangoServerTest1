@@ -50,12 +50,13 @@ INSTALLED_APPS = [
 ALLOWED_HOSTS = ['*']
 
 CHANNEL_LAYERS = {
-    # 'default': {
-    #     'BACKEND': 'channels_redis.core.RedisChannelLayer',
-    #     'CONFIG': {
-    #         "hosts": [('127.0.0.1', 6379)],
-    #     },
-    # },
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+            "symmetric_encryption_keys":[SECRET_KEY],
+        },
+    },
 }
 
 REST_FRAMEWORK = {
@@ -189,8 +190,11 @@ ROOT_URLCONF = 'book_project.urls'
 #本地文件系统缓存S
 CACHE = {
     'default' : {
-        'BACKEN' : 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION' : 'D:\git\bar'
+        'BACKEND':'django_redis.cache.RedisCache',
+        'LOCATION':'redis://127.0.0.1:6379/5',#选择第五个数据库 没有密码
+        'OPTIONS':{
+            'CLIENT_CLASS':'django_redis.client.DefaultClient',
+        }
     }
 }
 

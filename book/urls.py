@@ -2,7 +2,7 @@ from django.urls import path, re_path
 
 from django.conf.urls import url
 from django.contrib import admin
-from book.view import babyClassFormView,babyClassFormViewTest,weekReportDataView,editionControlView,weekReportView,classContentAboutView
+from book.view import classesAbout,babyClassFormView,babyClassFormViewTest,weekReportDataView,editionControlView,weekReportView,classContentAboutView
 # from book.view import websocketTestView
 from rest_framework.routers import DefaultRouter
 from book.view import ClassControlUserView
@@ -38,6 +38,7 @@ router = DefaultRouter() #创建路由
 router.register(r'classAbout',babyClassFormViewTest.classInfoViewSet) #注册路由
 router.register(r'UserAbout',ClassControlUserView.ClassControlUserViewSet)
 router.register(r'ClassContentAbout',classContentAboutView.ClassContentAboutViewSet)
+router.register(r'classesAbout',classesAbout.classesAbout)
 
 urlpatterns += router.urls
 

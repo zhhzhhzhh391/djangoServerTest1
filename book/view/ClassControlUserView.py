@@ -21,7 +21,7 @@ class ClassControlUserViewSet(ModelViewSet):
     serializer_class = ClassControlUserSerializer
 
     @action(methods=['post'],detail=False)
-    def loginPass(self,request):
+    def getSelectedUser(self,request):
         """
         登录接口、获取登录用户信息
         :return:
@@ -48,9 +48,16 @@ class ClassControlUserViewSet(ModelViewSet):
             UserToken.objects.update_or_create(user=user, defaults=defaults)
              #当对查询返回的QuerySet类型data进行反序列化的时候，如果传入的是多条数据，我们需要指定many=True
             ser = self.serializer_class(user,many=False)
-            return Response(data=ser.data,status=status.HTTP_200_OK)
+            return JsonResponse(code=userMsg.USER_LOGIN_SUCCESS,
+                                msg="user login success",
+                                data=ser.data,
+                                status=status.HTTP_200_OK)
         else:
-            return Response(data=None,status=status.HTTP_200_OK)
+
+            return JsonResponse(code=userMsg.USER_LOGIN_FAILED,
+                                msg="user login fail",
+                                data=None,
+                                status=status.HTTP_200_OK)
 
 class TokenAuthtication(BaseAuthentication):
     def authenticate(self, request):
