@@ -1,0 +1,4 @@
+
+#消息处理状态码
+CHATMSG_SUCCESS = 2000
+

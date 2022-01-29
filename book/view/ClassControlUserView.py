@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from rest_framework import exceptions
 from rest_framework.response import Response
 from book.pojo.JsonResponse import JsonResponse
-from book.constant import userMsg,userCode
+from book.constant import userCode
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 import hashlib
@@ -21,7 +21,7 @@ class ClassControlUserViewSet(ModelViewSet):
     serializer_class = ClassControlUserSerializer
 
     @action(methods=['post'],detail=False)
-    def getSelectedUser(self,request):
+    def userlogin(self,request):
         """
         登录接口、获取登录用户信息
         :return:
@@ -48,16 +48,12 @@ class ClassControlUserViewSet(ModelViewSet):
             UserToken.objects.update_or_create(user=user, defaults=defaults)
              #当对查询返回的QuerySet类型data进行反序列化的时候，如果传入的是多条数据，我们需要指定many=True
             ser = self.serializer_class(user,many=False)
-            return JsonResponse(code=userMsg.USER_LOGIN_SUCCESS,
-                                msg="user login success",
-                                data=ser.data,
-                                status=status.HTTP_200_OK)
+            return Response(data=ser.data,
+                            status=status.HTTP_200_OK)
         else:
-
-            return JsonResponse(code=userMsg.USER_LOGIN_FAILED,
-                                msg="user login fail",
-                                data=None,
-                                status=status.HTTP_200_OK)
+            noUser = {}
+            return Response(data=noUser,
+                            status=status.HTTP_200_OK)
 
 class TokenAuthtication(BaseAuthentication):
     def authenticate(self, request):

@@ -4,6 +4,7 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 from channels.exceptions import StopConsumer
 from book.models import UserToken
+from book.constant import userCode,chatMsgCode
 from book.models import User
 
 userList = [] #缓存进入房间的用户信息
@@ -25,30 +26,41 @@ class ChatConsumer(WebsocketConsumer):
             text_data = json.dumps(text_data['text'])
             text_data_json = json.loads(json.loads(text_data))
             code = text_data_json['code']
-            if code == 200:
+
+            #给客户端回调token
+            if code == userCode.USER_LOGIN_SUCCESS:
+                logging.info("账号登录成功，准备回调token")
+                #进入登录成功的逻辑
                 userId = text_data_json['id']
-                username = text_data_json['username']
-                print(username)
-                token = UserToken.objects.filter(user_id=userId);
-                msg = chat_code_to_msg(username,userId)
+                connectUserItem = getTokenFromServer(object,userId)
                 self.send(text_data=json.dumps({
                     'code':200,
-                    'msg':msg,
+                    'msg':connectUserItem,
                 }))
-            else:
-                self.send(text_data=json.dumps({
-                'code':400,
-                'msg':'erro',
-            }))
+
+            #处理客户端发送的消息
+            if code == chatMsgCode.CHATMSG_SUCCESS:
+                #处理聊天消息  客户端需要传送一个聊天内容和ID，用于存入redis
+                chatMsg = text_data_json['chatMsg']
+                userId = text_data_json['userId']
+                chatMsgDealer(object,chatMsg,userId)
+
+
+
+#登录成功，返回token给客户端
+def getTokenFromServer(self,userId):
+    token_obj = UserToken.objects.filter(user_id=userId).first()
+    user_obj = User.objects.filter(id=userId).first()
+    if token_obj and user_obj:
+        connectUserItem= {
+        'id':user_obj.id,
+        'username':user_obj.username,
+        'token':token_obj.token,
+        }
+    return connectUserItem
+
+
 
 #业务逻辑
-def chat_code_to_msg(username,userId):
-    user_item = {
-        'id':userId,
-        'username':username,
-    }
-
-    if user_item not in userList:
-        userList.append(user_item)
-
-    return userList
+def chatMsgDealer(self,chatMsg,userId):
+    pass
