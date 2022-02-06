@@ -1,9 +1,12 @@
+from lib2to3.pgen2 import token
+from os import stat
 import time
 from datetime import timedelta
 from datetime import datetime
+from wsgiref.util import request_uri
 from book.models import User
 from book.models import UserToken
-from book.serializers import ClassControlUserSerializer
+from book.serializers import ClassControlUserSerializer,userTokenSerializer
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
@@ -20,13 +23,34 @@ class ClassControlUserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = ClassControlUserSerializer
 
+    tokenQuerySet = UserToken.objects.all()
+    token_serializer_class = userTokenSerializer
+
+    @action(methods=['post'],detail=False)
+    def getToken(self,request):
+        """
+        获取已经登陆的用户的token
+        """
+        id = request.data.get('id',None)
+        username = request.data.get('username',None)
+        user_obj = self.queryset.filter(username=username)
+        user = user_obj.first()
+        if username is None:
+            tokendata = {}
+            return Response(data=tokendata,
+            status=status.HTTP_200_OK)
+        if username:
+            token_obj = self.tokenQuerySet.filter(user=user).first()
+            ser = self.token_serializer_class(token_obj,many=False)
+            return Response(data=ser.data,
+            status=status.HTTP_200_OK)
+
     @action(methods=['post'],detail=False)
     def userlogin(self,request):
         """
         登录接口、获取登录用户信息
         :return:
         """
-        print(request.data)
         username = request.data.get('username',None)
         password = request.data.get('password',None)
         if username and password is None:
