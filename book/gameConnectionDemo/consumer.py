@@ -1,5 +1,6 @@
 from collections import UserDict
 from email import message
+import imp
 import logging
 
 from channels.generic.websocket import WebsocketConsumer,AsyncWebsocketConsumer
@@ -7,12 +8,13 @@ from channels.layers import get_channel_layer
 import json
 from channels.exceptions import StopConsumer
 from book.models import UserToken
+from book.models import User
 from book.constant import userCode,chatMsgCode
 from book.models import User
 from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
 
 userList = [] #缓存当前房间用户信息
-
 class ChatConsumer(AsyncWebsocketConsumer):
 
     async def websocket_connect(self,message):
@@ -86,8 +88,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chatMsgDealer(self,event):
         msg = event['msg']
         userId = event['userId']
+        nickname = await getUserNickName(object,userId)
         await self.send(text_data=json.dumps({
             'code':chatMsgCode.CHATMSG_SEND_SUCCESS,
+            'nickname':nickname,
             'msg':msg,
             'userId':userId,
         }))
+
+@database_sync_to_async
+def getUserNickName(self,userId):
+    user_obj = User.objects.all().filter(id=userId).first()
+    return user_obj.nickname

@@ -1,4 +1,7 @@
 from __future__ import unicode_literals
+from distutils.command.upload import upload
+from pyexpat import model
+from statistics import mode
 from django.db import models
 import datetime
 from datetime import datetime
@@ -11,6 +14,8 @@ class User(models.Model):
     add_time = models.DateTimeField(auto_now_add=True,verbose_name="创建账号日期")
     email = models.CharField(max_length=64,verbose_name="邮箱")
     level = models.IntegerField(default="1",verbose_name="管理员等级")
+    nickname = models.CharField(max_length=64,verbose_name="用户昵称",default="user")
+
     objects = models.Manager()
 
 #存放用户token表
