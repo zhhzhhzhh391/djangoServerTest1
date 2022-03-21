@@ -1,11 +1,6 @@
-from genericpath import exists
-from lib2to3.pgen2 import token
-from os import stat
+
 import time
-from datetime import timedelta
 from datetime import datetime
-from tkinter.messagebox import NO
-from wsgiref.util import request_uri
 from book.models import User
 from book.models import UserToken
 from book.serializers import ClassControlUserSerializer,userTokenSerializer
@@ -16,7 +11,6 @@ from rest_framework import exceptions
 from rest_framework.response import Response
 from book.pojo.JsonResponse import JsonResponse
 from book.constant import userCode
-from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 import hashlib
 
@@ -81,31 +75,7 @@ class ClassControlUserViewSet(ModelViewSet):
             return Response(data=noUser,
                             status=status.HTTP_200_OK)
 
-    #return：userObj
-    #params:userId
-    @action(methods=['post'],detail=False)
-    def getUserInfo(self,request):
-        emptyUserData = {}
-        userid = request.data.get('id',None)
-        if userid is exists:
-            user_obj = self.queryset.filter(userid=userid).first()
-            ser = self.serializer_class(user_obj,many=False)
-            return Response(ser.data,status=status.HTTP_200_OK)
-        if userid is not exists:
-            return Response(emptyUserData,status=status.HTTP_200_OK)
 
-    #return:userObj
-    #params:userId,nickname
-    @action(methods="post",detail=False)
-    def updateUserNickname(self,request):
-        id = request.data.get('id',None)
-        nickname = request.data.get('id',None)
-        if id or nickname is None:
-            return None
-        else:
-            user_obj = self.queryset.filter(id=id).update(nickname=nickname)
-            ser = self.serializer_class(user_obj,many=False)
-            return Response(ser.data,status=status.HTTP_200_OK)
 
 class TokenAuthtication(BaseAuthentication):
     def authenticate(self, request):

@@ -1,10 +1,6 @@
-from django.urls import path
-from django.contrib import admin
-from book.view import babyClassFormViewTest
-# from book.view import websocketTestView
+
 from rest_framework.routers import DefaultRouter
-from book.view.userView import ClassControlUserView
-from rest_framework.documentation import include_docs_urls
+from book.view.userView import ClassControlUserView,UserSettingView,FriendListView
 
 
 urlpatterns = [
@@ -14,8 +10,9 @@ urlpatterns = [
 ]
 
 router = DefaultRouter() #创建路由
-router.register(r'classAbout',babyClassFormViewTest.classInfoViewSet) #注册路由
 router.register(r'UserAbout',ClassControlUserView.ClassControlUserViewSet)
+router.register(r'UserSetting',UserSettingView.UserSettingAboutViewSet)#usersetting界面消息用
+router.register(r'userFriendList',FriendListView.FriendListViewSet)#usersetting界面消息用
 
 urlpatterns += router.urls
 
