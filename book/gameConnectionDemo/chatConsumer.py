@@ -3,6 +3,7 @@ import json
 from book.constant import chatMsgCode
 from book.models import User
 from book.models import UserFriendList
+from book.models import ChatMsgData
 from channels.db import database_sync_to_async
 
  # self.userId = self.scope['url_route']['kwargs'].get("userId")
@@ -22,8 +23,9 @@ class chatConsumer(AsyncWebsocketConsumer):
             #聊天进入频道
             if code == chatMsgCode.CHAT_WITHOTHERS:
                 userId = text_data_json['id']
-                friendId = text_data_json['friendId']
+                friendId = text_data_json['friendsId']
                 group_name = await getChatGroupName(object,userId,friendId)
+                print(group_name)
                 await self.channel_layer.group_add(
                     group_name,
                     self.channel_name
@@ -33,6 +35,7 @@ class chatConsumer(AsyncWebsocketConsumer):
                 msg = text_data_json['msg']
                 id = text_data_json['id']
                 group_name = text_data_json['groupName']
+                await saveChatMsgData(object,id,msg,group_name)
                 await self.channel_layer.group_send(
                     group_name,
                     {
@@ -47,11 +50,12 @@ class chatConsumer(AsyncWebsocketConsumer):
         nickname = await getUserNickName(object,userId)
         await self.send(text_data=json.dumps({
             'code':chatMsgCode.CHATMSG_RECEIVE_SUCCESS,
-            'nickname':nickname,
-            'msg':msg,
-            'id':userId,
+            'data':{
+                'nickname':nickname,
+                'msg':msg,
+                'id':userId,
+            }
         }))
-
 
     async def websocket_disconnect(self, message):
         return await super().websocket_disconnect(message)
@@ -66,3 +70,8 @@ def getChatGroupName(self,userId,friendId):
 def getUserNickName(self,userId):
     user_obj = User.objects.all().filter(id=userId).first()
     return user_obj.nickname
+
+@database_sync_to_async
+def saveChatMsgData(self,userId,msg,groupName):
+    ChatMsgData.objects.update_or_create(userId=userId,msg=msg,groupName=groupName)
+

@@ -43,6 +43,36 @@ class UserFriendList(models.Model):
 
     objects = models.Manager()
 
+#好友申请列表
+class FriendApply(models.Model):
+    userId = models.IntegerField(max_length=64,verbose_name="申请人的Id")
+    friendsId = models.IntegerField(max_length=64,verbose_name="被申请人的Id")
+    applyStatus = models.IntegerField(max_length=64,verbose_name="申请状态")
+
+    class Mate:
+        manage = True
+        db_table = "friendApply"
+        verbose_name = "好友申请表"
+        verbose_name_plural = verbose_name
+
+    objects = models.Manager()
+
+#聊天数据表
+class ChatMsgData(models.Model):
+    userId = models.IntegerField(max_length=64,verbose_name="发送消息的用户的ID")
+    msg = models.CharField(max_length=254,verbose_name="聊天的内容")
+    groupName = models.CharField(max_length=64,verbose_name="聊天组Id")
+    msgTime = models.DateTimeField(default=datetime.now,verbose_name="添加时间")
+
+    class Mate:
+        manage = True
+        db_table = "ChatMsgData"
+        verbose_name = "聊天数据表"
+        verbose_name_plural = verbose_name
+
+    objects = models.Manager()
+
+
 class ClassContentAbout(models.Model):
     artClass = models.CharField(max_length=64,verbose_name="课程名称")
 

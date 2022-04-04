@@ -1,7 +1,6 @@
 
 from rest_framework.routers import DefaultRouter
-from book.view.userView import ClassControlUserView,UserSettingView,FriendListView
-
+from book.view.userView import ClassControlUserView,UserSettingView,FriendListView,ChatAboutView
 
 urlpatterns = [
     #websocket测试
@@ -13,6 +12,8 @@ router = DefaultRouter() #创建路由
 router.register(r'UserAbout',ClassControlUserView.ClassControlUserViewSet)
 router.register(r'UserSetting',UserSettingView.UserSettingAboutViewSet)#usersetting界面消息用
 router.register(r'userFriendList',FriendListView.FriendListViewSet)#usersetting界面消息用
+router.register(r'friendApply',FriendListView.FriendApplyViewSet)#friendapply界面消息用
+router.register(r'ChatAbout',ChatAboutView.ChatAboutViewSet)
 
 urlpatterns += router.urls
 

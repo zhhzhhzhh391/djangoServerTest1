@@ -4,6 +4,8 @@ from .models import User
 from .models import UserToken
 from .models import ClassContentAbout
 from .models import UserFriendList
+from .models import FriendApply
+from .models import ChatMsgData
 
 
 class ClassControlUserSerializer(serializers.ModelSerializer):
@@ -31,8 +33,21 @@ class userFriendListSerializer(serializers.ModelSerializer):
         model = UserFriendList
         fields = '__all__'
 
+class friendApplySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FriendApply
+        fields = '__all__'
+
 class ClassContentAboutSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ClassContentAbout
+        fields = '__all__'
+
+
+class ChatMsgDataSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ChatMsgData
         fields = '__all__'

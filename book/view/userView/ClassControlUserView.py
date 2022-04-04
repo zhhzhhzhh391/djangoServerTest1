@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework import exceptions
 from rest_framework.response import Response
-from book.pojo.JsonResponse import JsonResponse
+from book.view.JsonResponse import JsonResponse
 from book.constant import userCode
 from rest_framework import status
 import hashlib

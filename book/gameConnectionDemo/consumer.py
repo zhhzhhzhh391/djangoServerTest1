@@ -91,8 +91,10 @@ class UserListConsumer(AsyncWebsocketConsumer):
         userList = event['userList']
         await self.send(text_data=json.dumps({
             'code':chatMsgCode.ENTERROOM_SUCCESS,
-            'id':id,
-            'userList':userList,
+            'data':{
+                'id':id,
+                'userList':userList,
+            }
         }))
 
     #用户退出，通知状态给好友列表内其他玩家
@@ -101,7 +103,9 @@ class UserListConsumer(AsyncWebsocketConsumer):
         id = event['id']
         await self.send(text_data=json.dumps({
             'code':chatMsgCode.LEAVEROOM_SUCCESS,
-            'userList':userList,
+            'data':{
+                userList,
+            }
         }))
 
     #某个用户发送新消息，通知通道内所有用户收到新消息
@@ -111,9 +115,11 @@ class UserListConsumer(AsyncWebsocketConsumer):
         nickname = await getUserNickName(object,userId)
         await self.send(text_data=json.dumps({
             'code':chatMsgCode.CHATMSG_RECEIVE_SUCCESS,
-            'nickname':nickname,
-            'msg':msg,
-            'id':userId,
+            'data':{
+                nickname,
+                msg,
+                userId,
+        }
         }))
 
 
