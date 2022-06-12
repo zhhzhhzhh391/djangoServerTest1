@@ -23,6 +23,29 @@ class ClassControlUserViewSet(ModelViewSet):
     token_serializer_class = userTokenSerializer
 
     @action(methods=['post'],detail=False)
+    def userregister(self,request):
+        """
+        账号注册
+        :param request:username:账号,password:密码
+        :return:
+        """
+        ret = {"code":0,"data":None}
+        username = request.data.get('username',None)
+        userObj = self.queryset.filter(username=username).first()
+        if userObj:
+            ret['code'] = userCode.USER_REGISTER_FAILED
+            return Response(data=ret,status=status.HTTP_200_OK)
+        else:
+            ser = self.serializer_class(data=request.data,many=False)
+            if ser.is_valid():
+                ser.save()
+                ret['code'] = userCode.USER_REGISTER_SUCCESS
+                ret['data'] = ser.data
+            else:
+                ret['code'] = userCode.USER_REGISTER_FAILED
+            return Response(data=ret,status=status.HTTP_200_OK)
+
+    @action(methods=['post'],detail=False)
     def getToken(self,request):
         """
         获取已经登陆的用户的token
@@ -47,6 +70,7 @@ class ClassControlUserViewSet(ModelViewSet):
         登录接口、获取登录用户信息
         :return:
         """
+        ret = {"code":0,"data":None}
         username = request.data.get('username',None)
         password = request.data.get('password',None)
         if username and password is None:
@@ -68,11 +92,13 @@ class ClassControlUserViewSet(ModelViewSet):
             UserToken.objects.update_or_create(user=user, defaults=defaults)
              #当对查询返回的QuerySet类型data进行反序列化的时候，如果传入的是多条数据，我们需要指定many=True
             ser = self.serializer_class(user,many=False)
-            return Response(data=ser.data,
+            ret['code'] = userCode.USER_LOGIN_SUCCESS
+            ret['data'] = ser.data
+            return Response(data=ret,
                             status=status.HTTP_200_OK)
         else:
-            noUser = {}
-            return Response(data=noUser,
+            ret['code'] = userCode.USER_LOGIN_FAILED
+            return Response(data=ret,
                             status=status.HTTP_200_OK)
 
 

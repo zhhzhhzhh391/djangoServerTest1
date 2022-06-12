@@ -42,6 +42,7 @@ class UserListConsumer(AsyncWebsocketConsumer):
             if code == chatMsgCode.ENTERROOM_SUCCESS:
                 #进入登录成功的逻辑
                 userId = text_data_json['id']
+                print(userList)
                 if userId not in userList:
                     userList.append(userId)
                 await self.channel_layer.group_send(

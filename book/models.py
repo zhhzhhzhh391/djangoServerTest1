@@ -7,10 +7,10 @@ class User(models.Model):
     username = models.CharField(max_length=64,verbose_name="用户名",help_text='用户名')
     password = models.CharField(max_length=64,verbose_name="密码")
     add_time = models.DateTimeField(auto_now_add=True,verbose_name="创建账号日期")
-    email = models.CharField(max_length=64,verbose_name="邮箱")
     level = models.IntegerField(default="1",verbose_name="管理员等级")
     nickname = models.CharField(max_length=64,verbose_name="用户昵称",default="user")
     status = models.IntegerField(max_length=64,verbose_name="用户状态",default=0)#默认离线
+    headicon = models.TextField(verbose_name="存储图片",default=None)
 
     objects = models.Manager()
 

@@ -35,6 +35,7 @@ class chatConsumer(AsyncWebsocketConsumer):
                 msg = text_data_json['msg']
                 id = text_data_json['id']
                 group_name = text_data_json['groupName']
+                print(msg)
                 await saveChatMsgData(object,id,msg,group_name)
                 await self.channel_layer.group_send(
                     group_name,
@@ -47,11 +48,11 @@ class chatConsumer(AsyncWebsocketConsumer):
     async def chatMsgDealer(self,event):
         msg = event['msg']
         userId = event['id']
-        nickname = await getUserNickName(object,userId)
+        userObj = await getUserInfo(object,userId)
         await self.send(text_data=json.dumps({
             'code':chatMsgCode.CHATMSG_RECEIVE_SUCCESS,
             'data':{
-                'nickname':nickname,
+                'nickname':userObj.nickname,
                 'msg':msg,
                 'id':userId,
             }
@@ -67,9 +68,9 @@ def getChatGroupName(self,userId,friendId):
     return friendObj.groupName
 
 @database_sync_to_async
-def getUserNickName(self,userId):
+def getUserInfo(self,userId):
     user_obj = User.objects.all().filter(id=userId).first()
-    return user_obj.nickname
+    return user_obj
 
 @database_sync_to_async
 def saveChatMsgData(self,userId,msg,groupName):

@@ -48,6 +48,14 @@ class ClassContentAboutSerializer(serializers.ModelSerializer):
 
 class ChatMsgDataSerializer(serializers.ModelSerializer):
 
+    nickname = serializers.SerializerMethodField('getNickName')
+
     class Meta:
         model = ChatMsgData
         fields = '__all__'
+
+#使用context插入函数必须自定义函数来进行返回
+    def getNickName(self,obj):
+        nickname = self.context.get("nickname")
+        if nickname:
+            return nickname
